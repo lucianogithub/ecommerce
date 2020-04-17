@@ -56,6 +56,15 @@ class Page {
 
 	}
 
+	public static function debugaVetor($vetor, $interrompe = false) 
+	{	
+		echo "<pre>";
+		print_r($vetor);
+		echo "</pre>";
+		if($interrompe)
+		die();
+	}
+
 }
 
 ?>
