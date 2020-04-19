@@ -18,7 +18,7 @@ use PHPMailer\PHPMailer\Exception;
 
 class Mailer {
 
-	const USERNAME = ".@gmail.com";
+	const USERNAME = ".@.com";
 	const PASSWORD = "";
 	const NAME_FROM = "Hcode Store Estudo Lop";
 
