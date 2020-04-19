@@ -84,7 +84,9 @@ class User extends Model
 		$results = $sql->select("CALL sp_users_save(:desperson, :deslogin, :despassword, :desemail, :nrphone, :inadmin)", array(			
 			":desperson"=>utf8_decode($this->getdesperson()),
 			":deslogin"=>$this->getdeslogin(),
-			":despassword"=>$this->getdespassword(),
+			":despassword"=>password_hash($this->getdespassword(), PASSWORD_DEFAULT, [
+		"cost"=>12
+	]),
 			":desemail"=>$this->getdesemail(),
 			":nrphone"=>$this->getnrphone(),
 			":inadmin"=>$this->getinadmin()
@@ -190,6 +192,58 @@ class User extends Model
 
 			}
 		}
+
+	}
+
+	public static function validForgotDecrypt($code)
+	{
+		
+		$idrecovery = openssl_decrypt(base64_decode($code), 'AES-256-CBC', pack("a16",User::SECRET), 0, pack("a16", User::SECRET_IV));
+		
+		$sql = new Sql();
+
+		$results = $sql->select("
+			SELECT * FROM tb_userspasswordsrecoveries a
+			INNER JOIN tb_users b using(iduser)
+			INNER JOIN tb_persons c using(idperson)
+			WHERE
+				a.idrecovery = :idrecovery
+				AND
+				a.dtrecovery IS NULL
+				AND
+				DATE_ADD(a.dtregister, INTERVAL 1 HOUR) >= NOW();
+		", array(
+			":idrecovery"=>$idrecovery
+		));
+
+		if (count($results) === 0) {
+			throw new \Exception("Não foi possível recuperar a senha.");			
+		} else{
+			return $results[0];
+		}
+
+	}
+
+	public static function setForgotUsed($idrecovery)
+	{
+
+		$sql = new Sql();
+
+		$sql->query("UPDATE tb_userspasswordsrecoveries SET dtrecovery = NOW() WHERE idrecovery = :idrecovery", array(
+			":idrecovery"=>$idrecovery
+		));
+
+	}
+
+	public function setPassword($password)
+	{
+
+		$sql = new Sql();
+
+		$sql->query("UPDATE tb_users SET despassword = :password WHERE iduser = :iduser", array(
+			":password"=>$password,
+			":iduser"=>$this->getiduser()
+		));
 
 	}
 

@@ -33,8 +33,8 @@
   <div class="help-block text-center">
     <div class="callout callout-success">
       <h4>E-mail enviado!</h4>
-
       <p>Verifique as instruções no seu e-mail.</p>
+      <a href="/admin/login" style="text-decoration: none;">Clique aqui para logar novamente.</a>
     </div>
   </div>
   <div class="lockscreen-footer text-center">
