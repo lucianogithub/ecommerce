@@ -18,6 +18,9 @@ use PHPMailer\PHPMailer\Exception;
 
 class Mailer {
 
+	const USERNAME = "m";
+	const PASSWORD = "";
+	const NAME_FROM = "";
 
 	private $mail;
 

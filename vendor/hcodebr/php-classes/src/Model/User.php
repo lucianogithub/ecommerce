@@ -8,7 +8,12 @@ use \Hcode\Mailer;
 
 class User extends Model 
 {
-	
+	const SESSION = "";
+	const SECRET = "";
+	const SECRET_IV = "";
+	const ERROR = "";
+	const ERROR_REGISTER = "";
+	const SUCCESS = "";
 	
 	public static function login($login, $password)
 	{
